@@ -5,6 +5,7 @@ import { HealthBar } from './components/HUD/HealthBar';
 import { CoffeeBar } from './components/HUD/CoffeeBar';
 import { ScoreDisplay } from './components/HUD/ScoreDisplay';
 import { EventBanner } from './components/HUD/EventBanner';
+import { ChatPanel } from './components/Chat/ChatPanel';
 import { StartScreen } from './components/Screens/StartScreen';
 import { GameOverScreen } from './components/Screens/GameOverScreen';
 
@@ -33,6 +34,9 @@ function GameScreen() {
       <div className="flex-1 overflow-hidden pt-4">
         <KanbanBoard />
       </div>
+
+      {/* Chat */}
+      <ChatPanel />
     </div>
   );
 }
