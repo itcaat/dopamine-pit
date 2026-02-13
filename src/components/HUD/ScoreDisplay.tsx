@@ -1,12 +1,15 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGameStore } from '../../store/gameStore';
 import { getComboMultiplier, formatTime } from '../../utils/scoring';
+import { ROLE_META } from '../../data/tasks';
 
 export function ScoreDisplay() {
   const score = useGameStore((s) => s.score);
   const combo = useGameStore((s) => s.combo);
   const gameTime = useGameStore((s) => s.gameTime);
   const difficultyLevel = useGameStore((s) => s.difficultyLevel);
+  const role = useGameStore((s) => s.role);
+  const roleMeta = ROLE_META[role];
 
   const multiplier = getComboMultiplier(combo);
   const showCombo = combo >= 3;
@@ -60,6 +63,15 @@ export function ScoreDisplay() {
         <div className="text-[10px] text-gray-500">
           LVL {difficultyLevel}
         </div>
+      </div>
+
+      {/* Role badge */}
+      <div
+        className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-bold"
+        style={{ backgroundColor: roleMeta.color + '18', color: roleMeta.color }}
+      >
+        <span>{roleMeta.icon}</span>
+        <span className="hidden sm:inline">{roleMeta.label}</span>
       </div>
     </div>
   );

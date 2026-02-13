@@ -6,9 +6,10 @@ import type {
   GameEvent,
   GameStats,
   TaskType,
+  PlayerRole,
 } from '../types';
-import { TASK_TEMPLATES, TASK_CONFIG } from '../data/tasks';
-import { EVENT_TEMPLATES } from '../data/events';
+import { TASK_CONFIG, getTasksForRole } from '../data/tasks';
+import { EVENT_TEMPLATES, INTERN_HOTFIX_TITLES } from '../data/events';
 import { calculateScore } from '../utils/scoring';
 
 let taskIdCounter = 0;
@@ -28,6 +29,7 @@ const COLUMN_ORDER: ColumnId[] = ['backlog', 'todo', 'inProgress', 'done'];
 interface GameState {
   // Core
   phase: GamePhase;
+  role: PlayerRole;
   gameTime: number; // seconds since game start
   lastTickTime: number;
 
@@ -55,7 +57,7 @@ interface GameState {
   eventTimer: number;
 
   // Actions
-  startGame: () => void;
+  startGame: (role: PlayerRole) => void;
   resetGame: () => void;
 
   // Task actions
@@ -86,6 +88,7 @@ const initialStats: GameStats = {
 
 export const useGameStore = create<GameState>((set, get) => ({
   phase: 'menu',
+  role: 'frontend' as PlayerRole,
   gameTime: 0,
   lastTickTime: 0,
 
@@ -105,13 +108,14 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   difficultyLevel: 1,
   spawnTimer: 0,
-  eventTimer: 30, // first event after 30 seconds
+  eventTimer: 30,
 
-  startGame: () => {
+  startGame: (role: PlayerRole) => {
     taskIdCounter = 0;
     eventIdCounter = 0;
     set({
       phase: 'playing',
+      role,
       gameTime: 0,
       lastTickTime: performance.now() / 1000,
       hp: 100,
@@ -123,8 +127,8 @@ export const useGameStore = create<GameState>((set, get) => ({
       screenShake: false,
       stats: { ...initialStats, tasksByType: { bug: 0, feature: 0, hotfix: 0, meeting: 0, absurd: 0 } },
       difficultyLevel: 1,
-      spawnTimer: 1.5, // first task spawns after 1.5s
-      eventTimer: 30, // first event after 30s
+      spawnTimer: 1.5,
+      eventTimer: 30,
     });
   },
 
@@ -164,9 +168,10 @@ export const useGameStore = create<GameState>((set, get) => ({
       availableTypes = ['bug', 'feature', 'meeting', 'hotfix', 'absurd'];
     }
 
-    // Filter templates by available types, prefer ones not already on the board
+    // Get role-specific tasks, then filter by available types
+    const roleTasks = getTasksForRole(state.role);
     const existingTitles = new Set(state.tasks.map((t) => t.title));
-    const templates = TASK_TEMPLATES.filter((t) =>
+    const templates = roleTasks.filter((t) =>
       availableTypes.includes(t.type)
     );
     const freshTemplates = templates.filter((t) => !existingTitles.has(t.title));
@@ -453,13 +458,13 @@ export const useGameStore = create<GameState>((set, get) => ({
 
     // Apply instant effects
     if (template.type === 'internPushed') {
-      // Spawn 3 hotfixes
+      // Spawn 3 role-appropriate hotfixes
+      const hotfixTitles = INTERN_HOTFIX_TITLES[state.role];
       for (let i = 0; i < 3; i++) {
         const config = TASK_CONFIG.hotfix;
         const task: Task = {
           id: nextTaskId(),
-          title:
-            ['ПРОД УПАЛ, ВСЁ ГОРИТ', 'БД удалилась сама', 'Деньги списываются дважды'][i],
+          title: hotfixTitles[i],
           type: 'hotfix',
           column: 'backlog',
           maxTime: config.maxTime,

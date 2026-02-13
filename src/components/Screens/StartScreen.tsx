@@ -1,17 +1,27 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useGameStore } from '../../store/gameStore';
+import { ROLE_META } from '../../data/tasks';
+import type { PlayerRole } from '../../types';
+
+const ROLES: PlayerRole[] = ['frontend', 'backend', 'devops', 'sre'];
 
 export function StartScreen() {
   const startGame = useGameStore((s) => s.startGame);
+  const [selectedRole, setSelectedRole] = useState<PlayerRole | null>(null);
+
+  const handleStart = () => {
+    if (selectedRole) startGame(selectedRole);
+  };
 
   return (
-    <div className="flex flex-col items-center justify-center h-full px-4">
+    <div className="flex flex-col items-center justify-center h-full px-4 overflow-y-auto py-8">
       {/* Title */}
       <motion.div
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="text-center mb-8"
+        className="text-center mb-6"
       >
         <h1 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-neon-pink via-neon-purple to-neon-blue mb-2">
           DOPAMINE PIT
@@ -21,49 +31,84 @@ export function StartScreen() {
         </p>
       </motion.div>
 
-      {/* Rules */}
+      {/* Role selection */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.3, duration: 0.6 }}
-        className="max-w-md w-full bg-bg-column/70 rounded-xl p-6 mb-8 border border-gray-800"
+        transition={{ delay: 0.2, duration: 0.5 }}
+        className="max-w-lg w-full mb-6"
       >
-        <h2 className="text-sm font-bold text-neon-blue mb-4 tracking-wider">
+        <h2 className="text-sm font-bold text-neon-purple mb-3 tracking-wider text-center">
+          ВЫБЕРИ СПЕЦИАЛИЗАЦИЮ
+        </h2>
+        <div className="grid grid-cols-2 gap-3">
+          {ROLES.map((role) => {
+            const meta = ROLE_META[role];
+            const isSelected = selectedRole === role;
+            return (
+              <motion.button
+                key={role}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => setSelectedRole(role)}
+                className="relative text-left p-4 rounded-xl border-2 cursor-pointer transition-all duration-200"
+                style={{
+                  borderColor: isSelected ? meta.color : '#2a2a3e',
+                  backgroundColor: isSelected ? meta.color + '12' : '#12121a',
+                  boxShadow: isSelected ? `0 0 20px ${meta.color}25` : 'none',
+                }}
+              >
+                <div className="text-2xl mb-1">{meta.icon}</div>
+                <div
+                  className="text-sm font-bold"
+                  style={{ color: isSelected ? meta.color : '#e0e0e0' }}
+                >
+                  {meta.label}
+                </div>
+                <div className="text-[11px] text-gray-500 mt-0.5 leading-tight">
+                  {meta.description}
+                </div>
+                {isSelected && (
+                  <motion.div
+                    layoutId="role-check"
+                    className="absolute top-2 right-2 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-black"
+                    style={{ backgroundColor: meta.color }}
+                  >
+                    ✓
+                  </motion.div>
+                )}
+              </motion.button>
+            );
+          })}
+        </div>
+      </motion.div>
+
+      {/* Rules (compact) */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.4, duration: 0.5 }}
+        className="max-w-lg w-full bg-bg-column/70 rounded-xl p-5 mb-6 border border-gray-800"
+      >
+        <h2 className="text-sm font-bold text-neon-blue mb-3 tracking-wider">
           КАК ИГРАТЬ
         </h2>
-        <div className="space-y-3 text-sm text-gray-300">
-          <div className="flex gap-3">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-[13px] text-gray-300">
+          <div className="flex gap-2">
             <span className="text-neon-yellow shrink-0">01</span>
-            <span>
-              Задачи прилетают в <b className="text-white">Backlog</b>. Перетаскивай их вправо по колонкам.
-            </span>
+            <span>Задачи летят в <b className="text-white">Backlog</b>. Двигай вправо.</span>
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-2">
             <span className="text-neon-yellow shrink-0">02</span>
-            <span>
-              В <b className="text-neon-blue">In Progress</b> задача выполняется автоматически. Дождись заполнения прогресса.
-            </span>
+            <span>В <b className="text-neon-blue">In Progress</b> задача решается сама.</span>
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-2">
             <span className="text-neon-yellow shrink-0">03</span>
-            <span>
-              Если таймер задачи истечёт -- она <b className="text-neon-red">взорвётся</b> и снимет HP.
-            </span>
+            <span>Таймер истёк = <b className="text-neon-red">взрыв</b> и урон по HP.</span>
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-2">
             <span className="text-neon-yellow shrink-0">04</span>
-            <span>
-              Используй <b className="text-neon-orange">кофе</b> для ускорения. Выживи как можно дольше!
-            </span>
-          </div>
-        </div>
-
-        <div className="mt-4 pt-4 border-t border-gray-700/50 text-xs text-gray-500">
-          <div>
-            WIP-лимит: максимум 3 задачи в In Progress
-          </div>
-          <div className="mt-1">
-            Combo: закрывай задачи подряд для множителя очков
+            <span>Жми <b className="text-neon-orange">кофе</b> для буста. Выживи!</span>
           </div>
         </div>
       </motion.div>
@@ -71,27 +116,31 @@ export function StartScreen() {
       {/* Start button */}
       <motion.button
         initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.6, duration: 0.4 }}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={startGame}
-        className="
+        animate={{
+          opacity: selectedRole ? 1 : 0.4,
+          scale: 1,
+        }}
+        transition={{ delay: 0.5, duration: 0.4 }}
+        whileHover={selectedRole ? { scale: 1.05 } : {}}
+        whileTap={selectedRole ? { scale: 0.95 } : {}}
+        onClick={handleStart}
+        disabled={!selectedRole}
+        className={`
           px-12 py-4 rounded-xl text-lg font-black tracking-wider
-          bg-gradient-to-r from-neon-pink to-neon-purple
-          text-white shadow-lg cursor-pointer
-          hover:shadow-neon-pink/30 hover:shadow-xl
-          transition-shadow duration-300
-        "
+          text-white shadow-lg transition-shadow duration-300
+          ${selectedRole
+            ? 'bg-gradient-to-r from-neon-pink to-neon-purple cursor-pointer hover:shadow-neon-pink/30 hover:shadow-xl'
+            : 'bg-gray-700 cursor-not-allowed'}
+        `}
       >
-        НАЧАТЬ РАБОТУ
+        {selectedRole ? 'НАЧАТЬ РАБОТУ' : 'ВЫБЕРИ РОЛЬ'}
       </motion.button>
 
       <motion.p
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.9 }}
-        className="mt-4 text-xs text-gray-600"
+        transition={{ delay: 0.8 }}
+        className="mt-3 text-xs text-gray-600"
       >
         (Отказаться уже нельзя)
       </motion.p>

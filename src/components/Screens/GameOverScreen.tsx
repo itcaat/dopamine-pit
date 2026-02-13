@@ -1,14 +1,17 @@
 import { motion } from 'framer-motion';
 import { useGameStore } from '../../store/gameStore';
 import { formatTime } from '../../utils/scoring';
-import { TASK_LABELS } from '../../data/tasks';
+import { TASK_LABELS, ROLE_META } from '../../data/tasks';
 import type { TaskType } from '../../types';
 
 export function GameOverScreen() {
   const stats = useGameStore((s) => s.stats);
   const score = useGameStore((s) => s.score);
+  const role = useGameStore((s) => s.role);
   const resetGame = useGameStore((s) => s.resetGame);
   const startGame = useGameStore((s) => s.startGame);
+
+  const roleMeta = ROLE_META[role];
 
   // Fun title based on score
   const getTitle = () => {
@@ -51,6 +54,17 @@ export function GameOverScreen() {
         transition={{ delay: 0.3 }}
         className="max-w-sm w-full bg-bg-column/70 rounded-xl p-6 mb-6 border border-gray-800"
       >
+        {/* Role badge */}
+        <div className="flex items-center justify-center gap-2 mb-4">
+          <span className="text-lg">{roleMeta.icon}</span>
+          <span
+            className="text-sm font-bold"
+            style={{ color: roleMeta.color }}
+          >
+            {roleMeta.label}
+          </span>
+        </div>
+
         {/* Big score */}
         <div className="text-center mb-6">
           <div className="text-5xl font-black text-white tabular-nums">
@@ -127,7 +141,7 @@ export function GameOverScreen() {
         className="flex gap-4"
       >
         <button
-          onClick={startGame}
+          onClick={() => startGame(role)}
           className="
             px-8 py-3 rounded-xl font-bold tracking-wider
             bg-gradient-to-r from-neon-pink to-neon-purple

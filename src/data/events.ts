@@ -1,4 +1,4 @@
-import type { GameEventTemplate } from '../types';
+import type { GameEventTemplate, PlayerRole } from '../types';
 
 export const EVENT_TEMPLATES: GameEventTemplate[] = [
   {
@@ -38,6 +38,30 @@ export const EVENT_TEMPLATES: GameEventTemplate[] = [
     duration: 6,
   },
 ];
+
+/** Role-specific hotfix titles for the "intern pushed" event */
+export const INTERN_HOTFIX_TITLES: Record<PlayerRole, string[]> = {
+  frontend: [
+    'Белый экран на проде',
+    'Бандл весит 15 МБ',
+    'CORS на проде, локально ОК',
+  ],
+  backend: [
+    'БД удалилась сама',
+    'Деньги списываются дважды',
+    'API возвращает 200 на ошибки',
+  ],
+  devops: [
+    'ПРОД УПАЛ, ВСЁ ГОРИТ',
+    'Ноды в кластере NotReady',
+    'AWS счёт в 10 раз больше',
+  ],
+  sre: [
+    'Каскадный отказ 5 сервисов',
+    '503 на всё, мониторинг молчит',
+    'Latency p99 = 30 секунд',
+  ],
+};
 
 export const COLUMN_TITLES: Record<string, string> = {
   backlog: 'BACKLOG',

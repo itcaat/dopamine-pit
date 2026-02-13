@@ -1,10 +1,14 @@
 export type ColumnId = 'backlog' | 'todo' | 'inProgress' | 'done';
 
+export type PlayerRole = 'frontend' | 'backend' | 'devops' | 'sre';
+
 export type TaskType = 'bug' | 'feature' | 'hotfix' | 'meeting' | 'absurd';
 
 export interface TaskTemplate {
   title: string;
   type: TaskType;
+  /** Which roles this task is available for. If omitted, available for all. */
+  roles?: PlayerRole[];
 }
 
 export interface Task {
