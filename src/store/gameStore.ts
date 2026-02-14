@@ -406,17 +406,11 @@ export const useGameStore = create<GameState>((set, get) => ({
       spawnTimer: newSpawnTimer,
       eventTimer: newEventTimer,
       activeEvent,
-      screenShake: hpDamage > 0 ? true : state.screenShake,
       stats: {
         ...state.stats,
         survivalTime: newGameTime,
       },
     });
-
-    // Clear screen shake
-    if (hpDamage > 0) {
-      setTimeout(() => set({ screenShake: false }), 500);
-    }
   },
 
   removeTask: (taskId: string) => {
