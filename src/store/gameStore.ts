@@ -476,7 +476,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         screenShake: true,
         stats: { ...state.stats, eventsTriggered: state.stats.eventsTriggered + 1 },
       });
-      setTimeout(() => set({ activeEvent: null, screenShake: false }), 2000);
+      setTimeout(() => set({ activeEvent: null, screenShake: false }), 7000);
       return;
     }
 
@@ -502,7 +502,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         screenShake: true,
         stats: { ...state.stats, eventsTriggered: state.stats.eventsTriggered + 1 },
       });
-      setTimeout(() => set({ activeEvent: null, screenShake: false }), 2000);
+      setTimeout(() => set({ activeEvent: null, screenShake: false }), 7000);
       return;
     }
 

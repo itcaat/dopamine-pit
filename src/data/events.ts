@@ -5,19 +5,19 @@ export const EVENT_TEMPLATES: GameEventTemplate[] = [
     type: 'fridayDeploy',
     title: 'ПЯТНИЧНЫЙ ДЕПЛОЙ',
     description: 'Все таймеры ускоряются x2!',
-    duration: 8,
+    duration: 13,
   },
   {
     type: 'investorCall',
     title: 'СОЗВОН С ИНВЕСТОРОМ',
     description: 'In Progress заблокирован!',
-    duration: 5,
+    duration: 10,
   },
   {
     type: 'coffeeBroken',
     title: 'КОФЕМАШИНА СЛОМАЛАСЬ',
     description: 'Кофе не восстанавливается!',
-    duration: 10,
+    duration: 15,
   },
   {
     type: 'internPushed',
@@ -35,7 +35,7 @@ export const EVENT_TEMPLATES: GameEventTemplate[] = [
     type: 'retro',
     title: 'РЕТРО',
     description: 'Все таймеры замедлены. Передышка!',
-    duration: 6,
+    duration: 11,
   },
 ];
 
