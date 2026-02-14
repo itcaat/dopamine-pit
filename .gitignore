@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Source media files (copies live in public/)
+/*.mp3
+/*.svg
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

@@ -95,3 +95,9 @@ body {
 .urgent-pulse {
   animation: urgentPulse 0.8s ease-in-out infinite;
 }
+
+/* Mini equalizer bars */
+@keyframes eq-bar {
+  0%   { height: 3px; }
+  100% { height: 16px; }
+}

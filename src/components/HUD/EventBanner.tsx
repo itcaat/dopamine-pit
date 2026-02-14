@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGameStore } from '../../store/gameStore';
+import { MusicPlayer } from './MusicPlayer';
 
 const EVENT_COLORS: Record<string, string> = {
   fridayDeploy: '#ff3b3b',
@@ -16,7 +17,7 @@ export function EventBanner() {
   return (
     <div className="flex-1 flex items-center justify-center min-w-0 mx-1 md:mx-4">
       <AnimatePresence initial={false} mode="wait">
-        {activeEvent && (
+        {activeEvent ? (
           <motion.div
             key={activeEvent.id}
             initial={{ opacity: 0, scale: 0.9 }}
@@ -39,6 +40,16 @@ export function EventBanner() {
             <span className="text-[11px] text-gray-400 whitespace-nowrap hidden md:inline">
               {activeEvent.description}
             </span>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="player"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <MusicPlayer />
           </motion.div>
         )}
       </AnimatePresence>
