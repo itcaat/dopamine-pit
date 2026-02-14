@@ -58,6 +58,15 @@ class AudioEngine {
     this.updateSnapshot();
   }
 
+  /** Start playback if not already playing (safe to call multiple times) */
+  autoPlay() {
+    if (this._playing) return;
+    this.audio.play().then(() => {
+      this._playing = true;
+      this.updateSnapshot();
+    }).catch(() => {});
+  }
+
   next() {
     this._trackIdx = (this._trackIdx + 1) % TRACKS.length;
     this.audio.src = TRACKS[this._trackIdx].src;

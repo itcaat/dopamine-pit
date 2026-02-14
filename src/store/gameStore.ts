@@ -8,6 +8,7 @@ import type {
   TaskType,
   PlayerRole,
 } from '../types';
+import { audioEngine } from '../engine/audioEngine';
 import { TASK_CONFIG, getTasksForRole } from '../data/tasks';
 import { EVENT_TEMPLATES, INTERN_HOTFIX_TITLES } from '../data/events';
 import { calculateScore } from '../utils/scoring';
@@ -113,6 +114,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   startGame: (role: PlayerRole) => {
     taskIdCounter = 0;
     eventIdCounter = 0;
+    audioEngine.autoPlay();
     set({
       phase: 'playing',
       role,
