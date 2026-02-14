@@ -187,7 +187,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     const config = TASK_CONFIG[template.type];
 
     // Scale difficulty: reduce timers at higher levels
-    const timeMultiplier = Math.max(0.5, 1 - (level - 1) * 0.1);
+    const timeMultiplier = Math.max(0.6, 1 - (level - 1) * 0.08);
 
     const task: Task = {
       id: nextTaskId(),
@@ -356,9 +356,9 @@ export const useGameStore = create<GameState>((set, get) => ({
 
     // Calculate difficulty level
     let newLevel = 1;
-    if (newGameTime >= 180) newLevel = 4;
-    else if (newGameTime >= 120) newLevel = 3;
-    else if (newGameTime >= 60) newLevel = 2;
+    if (newGameTime >= 270) newLevel = 4;
+    else if (newGameTime >= 180) newLevel = 3;
+    else if (newGameTime >= 90) newLevel = 2;
 
     // Check for spawn
     let newSpawnTimer = state.spawnTimer - deltaSeconds;
@@ -366,7 +366,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       // Spawn a task
       setTimeout(() => get().spawnTask(), 0);
       // Reset spawn timer based on difficulty
-      const spawnIntervals = [5, 3.5, 2.5, 1.2];
+      const spawnIntervals = [8, 5, 3.5, 2];
       newSpawnTimer = spawnIntervals[newLevel - 1] || 1.2;
     }
 

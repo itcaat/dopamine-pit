@@ -193,11 +193,11 @@ export const TASK_CONFIG: Record<TaskType, {
   points: number;
   damage: number;
 }> = {
-  bug: { maxTime: 22, workTime: 3, points: 10, damage: 8 },
-  feature: { maxTime: 30, workTime: 5, points: 25, damage: 12 },
-  hotfix: { maxTime: 12, workTime: 2, points: 30, damage: 15 },
-  meeting: { maxTime: 25, workTime: 4, points: 5, damage: 6 },
-  absurd: { maxTime: 35, workTime: 6, points: 50, damage: 15 },
+  bug: { maxTime: 30, workTime: 4, points: 10, damage: 8 },
+  feature: { maxTime: 40, workTime: 6, points: 25, damage: 12 },
+  hotfix: { maxTime: 18, workTime: 3, points: 30, damage: 15 },
+  meeting: { maxTime: 35, workTime: 5, points: 5, damage: 6 },
+  absurd: { maxTime: 45, workTime: 7, points: 50, damage: 15 },
 };
 
 export const TASK_COLORS: Record<TaskType, string> = {
