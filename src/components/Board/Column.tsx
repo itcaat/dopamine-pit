@@ -38,7 +38,7 @@ export function Column({ id, tasks }: ColumnProps) {
       data-tutorial={id === 'backlog' ? 'col-backlog' : id === 'inProgress' ? 'col-inprogress' : undefined}
       className={`
         flex flex-col rounded-xl
-        w-[75vw] min-w-[75vw] md:w-full md:min-w-0 md:flex-1
+        w-[65vw] min-w-[65vw] md:w-full md:min-w-0 md:flex-1
         snap-center md:snap-align-none
         border border-gray-800/60
         transition-all duration-200

@@ -10,6 +10,7 @@ import { ChatPanel } from './components/Chat/ChatPanel';
 import { StartScreen } from './components/Screens/StartScreen';
 import { GameOverScreen } from './components/Screens/GameOverScreen';
 import { Tutorial, shouldShowTutorial } from './components/Tutorial/Tutorial';
+import { TaskCounts } from './components/HUD/TaskCounts';
 
 function GameScreen() {
   useGameLoop();
@@ -49,6 +50,7 @@ function GameScreen() {
         <div className="md:hidden">
           <div className="flex items-center justify-between px-2.5 pt-1.5 pb-0.5">
             <HealthBar />
+            <TaskCounts />
             <ScoreDisplay />
           </div>
           <div className="flex items-center justify-between px-2.5 pb-1.5">
