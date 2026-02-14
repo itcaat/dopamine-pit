@@ -10,9 +10,9 @@ export function HealthBar() {
     percent > 60 ? '#39ff14' : percent > 30 ? '#ffe600' : '#ff3b3b';
 
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-xs font-bold text-gray-400 w-6">HP</span>
-      <div className="w-32 h-4 bg-gray-800 rounded-full overflow-hidden border border-gray-700">
+    <div className="flex items-center gap-1.5 md:gap-2">
+      <span className="text-xs font-bold text-gray-400">HP</span>
+      <div className="w-20 md:w-32 h-3.5 md:h-4 bg-gray-800 rounded-full overflow-hidden border border-gray-700">
         <motion.div
           className="h-full rounded-full"
           style={{ backgroundColor: color }}
@@ -21,7 +21,7 @@ export function HealthBar() {
         />
       </div>
       <span
-        className="text-xs font-bold tabular-nums w-8"
+        className="text-xs font-bold tabular-nums"
         style={{ color }}
       >
         {Math.ceil(hp)}

@@ -36,7 +36,9 @@ export function Column({ id, tasks }: ColumnProps) {
     <div
       ref={setNodeRef}
       className={`
-        flex flex-col rounded-xl min-w-0 w-full flex-1
+        flex flex-col rounded-xl
+        w-[75vw] min-w-[75vw] md:w-full md:min-w-0 md:flex-1
+        snap-center md:snap-align-none
         border border-gray-800/60
         transition-all duration-200
         ${isOver ? 'ring-2 ring-neon-blue/50 bg-bg-column' : 'bg-bg-column/80'}
@@ -44,7 +46,7 @@ export function Column({ id, tasks }: ColumnProps) {
       `}
     >
       {/* Column header */}
-      <div className="flex items-center justify-between px-4 py-4 border-b border-gray-800">
+      <div className="flex items-center justify-between px-3 md:px-4 py-3 md:py-4 border-b border-gray-800">
         <div className="flex items-center gap-2">
           <div
             className="w-2.5 h-2.5 rounded-full"
@@ -71,7 +73,7 @@ export function Column({ id, tasks }: ColumnProps) {
       )}
 
       {/* Tasks list */}
-      <div className="flex-1 p-3.5 overflow-y-auto column-scroll">
+      <div className="flex-1 p-2.5 md:p-3.5 overflow-y-auto column-scroll">
         <SortableContext items={taskIds} strategy={verticalListSortingStrategy}>
           <AnimatePresence mode="popLayout">
             {tasks.map((task) => (

@@ -105,7 +105,7 @@ export function TaskCard({ task }: TaskCardProps) {
       exit={{ opacity: 0, scale: 0.5, y: 20 }}
       transition={{ duration: task.exploding ? 0.4 : 0.3 }}
       className={`
-        relative rounded-lg p-4 mb-3 cursor-grab active:cursor-grabbing
+        relative rounded-lg p-3 md:p-4 mb-2.5 md:mb-3 cursor-grab active:cursor-grabbing
         border-l-4 select-none
         ${isUrgent && !task.exploding ? 'urgent-pulse' : ''}
         ${task.exploding ? '' : 'hover:brightness-125'}
@@ -126,8 +126,8 @@ export function TaskCard({ task }: TaskCardProps) {
             onPointerDown={(e) => e.stopPropagation()}
             onClick={handleAdvance}
             className="
-              text-[10px] font-bold px-2.5 py-0.5 rounded
-              bg-white/10 text-white/80 hover:bg-white/20
+              text-[11px] md:text-[10px] font-bold px-3 py-1.5 md:px-2.5 md:py-0.5 rounded
+              bg-white/10 text-white/80 hover:bg-white/20 active:bg-white/30
               cursor-pointer transition-colors
             "
           >

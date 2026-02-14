@@ -191,19 +191,19 @@ export function ChatPanel() {
   return (
     <div className="shrink-0 border-t border-gray-800/60 bg-bg-column/60">
       {/* Chat header */}
-      <div className="flex items-center gap-2 px-4 py-1.5 border-b border-gray-800/40">
+      <div className="flex items-center gap-2 px-3 md:px-4 py-1 md:py-1.5 border-b border-gray-800/40">
         <span className="text-[10px] text-gray-500 font-bold tracking-wider uppercase">
-          💬 Рабочий чат
+          💬 Чат
         </span>
         <span className="text-[10px] text-gray-600">
-          {stats.tasksCompleted > 0 ? `${messages.length} сообщений` : 'онлайн: 6'}
+          {stats.tasksCompleted > 0 ? `${messages.length}` : 'онлайн: 6'}
         </span>
       </div>
 
       {/* Messages */}
       <div
         ref={scrollRef}
-        className="h-28 overflow-y-auto px-4 py-2 space-y-1 chat-scroll"
+        className="h-20 md:h-28 overflow-y-auto px-3 md:px-4 py-1.5 md:py-2 space-y-0.5 md:space-y-1 chat-scroll"
       >
         <AnimatePresence initial={false}>
           {messages.map((msg) => (
@@ -212,7 +212,7 @@ export function ChatPanel() {
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.2 }}
-              className="flex gap-2 text-[12px] leading-relaxed"
+              className="flex gap-1.5 md:gap-2 text-[11px] md:text-[12px] leading-relaxed"
             >
               <span className="text-gray-600 tabular-nums shrink-0 text-[10px] mt-0.5">
                 {formatTime(msg.timestamp)}

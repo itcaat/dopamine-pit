@@ -12,14 +12,14 @@ export function CoffeeBar() {
   const canUse = coffee >= 20 && !isBroken;
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1.5 md:gap-2">
       <button
         onClick={useCoffee}
         disabled={!canUse}
         className={`
-          text-sm px-2.5 py-1 rounded font-bold transition-all flex items-center gap-1.5
+          text-sm px-2 md:px-2.5 py-1 rounded font-bold transition-all flex items-center gap-1 md:gap-1.5
           ${canUse
-            ? 'bg-neon-orange/20 text-neon-orange hover:bg-neon-orange/30 cursor-pointer'
+            ? 'bg-neon-orange/20 text-neon-orange hover:bg-neon-orange/30 cursor-pointer active:scale-95'
             : 'bg-gray-800 text-gray-600 cursor-not-allowed'}
         `}
         title="Ускорить задачи в In Progress (−20 кофе)"
@@ -27,7 +27,7 @@ export function CoffeeBar() {
         <span>☕</span>
         <span className="text-[10px] tracking-wide">БУСТ</span>
       </button>
-      <div className="w-24 h-4 bg-gray-800 rounded-full overflow-hidden border border-gray-700">
+      <div className="w-16 md:w-24 h-3.5 md:h-4 bg-gray-800 rounded-full overflow-hidden border border-gray-700">
         <motion.div
           className="h-full rounded-full"
           style={{ backgroundColor: isBroken ? '#555' : '#ff9500' }}
@@ -35,7 +35,7 @@ export function CoffeeBar() {
           transition={{ duration: 0.3 }}
         />
       </div>
-      <span className="text-xs text-gray-400 tabular-nums w-8">
+      <span className="text-xs text-gray-400 tabular-nums">
         {Math.ceil(coffee)}
       </span>
     </div>

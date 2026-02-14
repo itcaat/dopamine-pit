@@ -15,18 +15,18 @@ export function ScoreDisplay() {
   const showCombo = combo >= 3;
 
   return (
-    <div className="flex items-center gap-5">
+    <div className="flex items-center gap-2.5 md:gap-5">
       {/* Score */}
       <div className="text-right">
         <motion.div
           key={score}
           initial={{ scale: 1.3, color: '#39ff14' }}
           animate={{ scale: 1, color: '#e0e0e0' }}
-          className="text-xl font-bold tabular-nums"
+          className="text-base md:text-xl font-bold tabular-nums"
         >
           {score.toLocaleString()}
         </motion.div>
-        <div className="text-[10px] text-gray-500 uppercase tracking-wider">
+        <div className="text-[9px] md:text-[10px] text-gray-500 uppercase tracking-wider">
           Score
         </div>
       </div>
@@ -44,12 +44,12 @@ export function ScoreDisplay() {
               key={combo}
               initial={{ scale: 1.5 }}
               animate={{ scale: 1 }}
-              className="text-lg font-black text-neon-pink"
+              className="text-sm md:text-lg font-black text-neon-pink"
             >
               {combo}
             </motion.div>
-            <div className="text-[10px] text-neon-pink/70">
-              COMBO {multiplier}
+            <div className="text-[9px] md:text-[10px] text-neon-pink/70">
+              x{multiplier}
             </div>
           </motion.div>
         )}
@@ -57,17 +57,17 @@ export function ScoreDisplay() {
 
       {/* Timer & Level */}
       <div className="text-right">
-        <div className="text-sm font-mono text-gray-300 tabular-nums">
+        <div className="text-xs md:text-sm font-mono text-gray-300 tabular-nums">
           {formatTime(gameTime)}
         </div>
-        <div className="text-[10px] text-gray-500">
+        <div className="text-[9px] md:text-[10px] text-gray-500">
           LVL {difficultyLevel}
         </div>
       </div>
 
       {/* Role badge */}
       <div
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold"
+        className="flex items-center gap-1 md:gap-1.5 px-2 md:px-3 py-1 md:py-1.5 rounded-lg text-xs font-bold"
         style={{ backgroundColor: roleMeta.color + '18', color: roleMeta.color }}
       >
         <span>{roleMeta.icon}</span>
