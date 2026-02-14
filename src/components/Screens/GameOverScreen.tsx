@@ -171,9 +171,10 @@ export function GameOverScreen() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.9 }}
-        className="mt-6 px-6 py-2.5 rounded-xl text-sm font-bold tracking-wider border border-neon-blue/40 text-neon-blue hover:bg-neon-blue/10 transition-colors"
+        className="mt-6 flex items-center gap-2.5 px-6 py-2.5 rounded-xl text-sm font-bold tracking-wider border border-neon-blue/40 text-neon-blue hover:bg-neon-blue/10 transition-colors"
       >
-        📢 DevOps Brain — Telegram
+        <img src={`${import.meta.env.BASE_URL}telegram.svg`} alt="" className="w-5 h-5" />
+        DevOps Brain
       </motion.a>
     </div>
   );
