@@ -218,7 +218,7 @@ export function Leaderboard({ playerNickname, playerCompany, onProfileChange }: 
           Рейтинг
         </h2>
         {tab === 'week' && (
-          <p className="text-[10px] text-gray-500 mt-0.5">{tournamentRange}</p>
+          <p className="text-[10px] text-gray-500 mt-0.5">Турнир: {tournamentRange}</p>
         )}
         {tab === 'company' && effectiveCompany && (
           <p className="text-[10px] text-gray-500 mt-0.5">{effectiveCompany}</p>

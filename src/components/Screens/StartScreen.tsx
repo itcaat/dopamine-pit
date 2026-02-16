@@ -36,7 +36,7 @@ export function StartScreen() {
           I KANBAN
         </h1>
         <p className="text-lg text-gray-400 font-mono">
-          // игра для тех кто любит закрывать задачки ;)
+          // закрой как можно больше задач ;)
         </p>
       </motion.div>
 

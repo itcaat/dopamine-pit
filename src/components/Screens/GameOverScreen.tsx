@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useGameStore } from '../../store/gameStore';
 import { formatTime } from '../../utils/scoring';
 import { TASK_LABELS, ROLE_META } from '../../data/tasks';
-import { submitScore, fetchCompanies, incrementGames, supabaseConfigured } from '../../lib/supabase';
+import { submitScore, fetchCompanies, incrementGames, checkNicknameInCompany, supabaseConfigured } from '../../lib/supabase';
 import { getCurrentTournamentId } from '../../lib/tournament';
 import { Leaderboard } from './Leaderboard';
 import type { TaskType } from '../../types';
@@ -32,6 +32,7 @@ export function GameOverScreen() {
   >('idle');
   const [showForm, setShowForm] = useState(false);
   const [gamesPlayed, setGamesPlayed] = useState<number | null>(null);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   // Company autocomplete
   const [companies, setCompanies] = useState<string[]>([]);
@@ -96,10 +97,43 @@ export function GameOverScreen() {
     }
   }, [doSubmit]);
 
-  const handleManualSubmit = useCallback(() => {
+  const handleManualSubmit = useCallback(async () => {
+    const trimmedNick = nickname.trim();
+    const trimmedComp = company.trim();
+
+    // If company is set and this is NOT a returning user (different from localStorage),
+    // check if the nickname already exists in this company
+    const savedNick = localStorage.getItem(LS_NICK) ?? '';
+    const savedComp = localStorage.getItem(LS_COMPANY) ?? '';
+    const isReturning =
+      savedNick.toLowerCase() === trimmedNick.toLowerCase() &&
+      savedComp.toLowerCase() === trimmedComp.toLowerCase();
+
+    if (!isReturning && trimmedComp && trimmedNick) {
+      try {
+        const exists = await checkNicknameInCompany(trimmedNick, trimmedComp);
+        if (exists) {
+          setShowConfirm(true);
+          return;
+        }
+      } catch {
+        // If check fails, proceed anyway
+      }
+    }
+
     doSubmit(nickname, company);
     setShowForm(false);
   }, [doSubmit, nickname, company]);
+
+  const handleConfirmYes = useCallback(() => {
+    setShowConfirm(false);
+    doSubmit(nickname, company);
+    setShowForm(false);
+  }, [doSubmit, nickname, company]);
+
+  const handleConfirmNo = useCallback(() => {
+    setShowConfirm(false);
+  }, []);
 
   // Fun title based on score
   const getTitle = () => {
@@ -309,19 +343,51 @@ export function GameOverScreen() {
                   </AnimatePresence>
                 </div>
 
+                {/* Confirm dialog */}
+                <AnimatePresence>
+                  {showConfirm && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -4 }}
+                      className="mt-3 p-3 rounded-lg bg-neon-purple/10 border border-neon-purple/30"
+                    >
+                      <p className="text-xs text-gray-300 mb-2.5">
+                        Игрок <span className="font-bold text-neon-purple">{nickname.trim()}</span> уже есть в компании <span className="font-bold text-white">{company.trim()}</span>. Это вы?
+                      </p>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={handleConfirmYes}
+                          className="flex-1 py-2 rounded-lg text-xs font-bold uppercase tracking-wider cursor-pointer bg-neon-purple/20 text-neon-purple hover:bg-neon-purple/30 transition-colors"
+                        >
+                          Да, это я
+                        </button>
+                        <button
+                          onClick={handleConfirmNo}
+                          className="flex-1 py-2 rounded-lg text-xs font-bold uppercase tracking-wider cursor-pointer bg-gray-800 text-gray-400 hover:text-white transition-colors"
+                        >
+                          Сменить ник
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
                 {/* Submit button */}
-                <button
-                  onClick={handleManualSubmit}
-                  disabled={!hasNickname || submitState === 'submitting'}
-                  className="
-                    w-full mt-3 py-2.5 rounded-lg font-bold text-sm uppercase tracking-wider
-                    transition-all cursor-pointer
-                    bg-gradient-to-r from-neon-purple to-neon-blue text-white hover:scale-[1.02]
-                    disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
-                  "
-                >
-                  {submitState === 'submitting' ? 'Отправляю...' : 'Сохранить и показать рейтинг'}
-                </button>
+                {!showConfirm && (
+                  <button
+                    onClick={handleManualSubmit}
+                    disabled={!hasNickname || submitState === 'submitting'}
+                    className="
+                      w-full mt-3 py-2.5 rounded-lg font-bold text-sm uppercase tracking-wider
+                      transition-all cursor-pointer
+                      bg-gradient-to-r from-neon-purple to-neon-blue text-white hover:scale-[1.02]
+                      disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
+                    "
+                  >
+                    {submitState === 'submitting' ? 'Отправляю...' : 'Сохранить и показать рейтинг'}
+                  </button>
+                )}
               </motion.div>
             ) : (
               /* Compact badge: auto-submitted or already done */

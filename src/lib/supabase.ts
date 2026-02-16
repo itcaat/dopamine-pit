@@ -28,6 +28,20 @@ export interface LeaderboardEntry {
   created_at: string;
 }
 
+/** Check if a nickname already exists for a given company */
+export async function checkNicknameInCompany(
+  nickname: string,
+  company: string,
+): Promise<boolean> {
+  const db = ensureClient();
+  const { count } = await db
+    .from('leaderboard')
+    .select('*', { count: 'exact', head: true })
+    .ilike('nickname', nickname)
+    .ilike('company', company);
+  return (count ?? 0) > 0;
+}
+
 /** Submit a new score (every game result is saved) */
 export async function submitScore(entry: Omit<LeaderboardEntry, 'id' | 'created_at'>) {
   const db = ensureClient();

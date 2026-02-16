@@ -24,10 +24,13 @@ export function getTournamentDateRange(tournamentId: string) {
   return { start, end };
 }
 
-/** Format tournament dates for display: "13 Feb 12:00 – 20 Feb 12:00" */
+/** Format tournament dates for display: "13 февр. 12:00 – 20 февр. 12:00 МСК" */
 export function formatTournamentRange(tournamentId: string): string {
   const { start, end } = getTournamentDateRange(tournamentId);
-  const fmt = (d: Date) =>
-    d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', timeZone: 'Europe/Moscow' });
-  return `${fmt(start)} – ${fmt(end)}`;
+  const fmt = (d: Date) => {
+    const date = d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', timeZone: 'Europe/Moscow' });
+    const time = d.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Moscow' });
+    return `${date} ${time}`;
+  };
+  return `${fmt(start)} – ${fmt(end)} МСК`;
 }
