@@ -65,3 +65,45 @@ $$;
 
 -- Note: all game results are stored (no upsert, no cleanup).
 -- Leaderboard queries use ORDER BY score DESC to show top results.
+
+-- ============================================
+-- Tournament announcements (pg_cron + pg_net)
+-- ============================================
+-- Enable extensions (run once in Supabase SQL Editor):
+--   create extension if not exists pg_cron;
+--   create extension if not exists pg_net;
+--
+-- Schedule tournament results + new tournament every Friday at 09:00 UTC (12:00 MSK):
+-- Replace <YOUR_SUPABASE_URL> and <YOUR_SERVICE_ROLE_KEY> with actual values.
+--
+-- select cron.schedule(
+--   'tournament-announce',
+--   '0 9 * * 5',
+--   $$
+--   select net.http_post(
+--     url := '<YOUR_SUPABASE_URL>/functions/v1/tournament-announce',
+--     headers := jsonb_build_object(
+--       'Content-Type', 'application/json',
+--       'Authorization', 'Bearer <YOUR_SERVICE_ROLE_KEY>'
+--     ),
+--     body := '{}'::jsonb
+--   );
+--   $$
+-- );
+--
+-- Schedule daily standings every day at 09:00 UTC (12:00 MSK), except Friday (handled above):
+--
+-- select cron.schedule(
+--   'daily-standings',
+--   '0 9 * * 0-4,6',
+--   $$
+--   select net.http_post(
+--     url := '<YOUR_SUPABASE_URL>/functions/v1/daily-standings',
+--     headers := jsonb_build_object(
+--       'Content-Type', 'application/json',
+--       'Authorization', 'Bearer <YOUR_SERVICE_ROLE_KEY>'
+--     ),
+--     body := '{}'::jsonb
+--   );
+--   $$
+-- );
