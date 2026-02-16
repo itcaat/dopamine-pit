@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useGameStore } from '../../store/gameStore';
 import { ROLE_META } from '../../data/tasks';
 import { supabaseConfigured } from '../../lib/supabase';
@@ -8,11 +8,45 @@ import type { PlayerRole } from '../../types';
 
 const ROLES: PlayerRole[] = ['frontend', 'backend', 'devops', 'sre', 'product', 'analyst'];
 
+const SUBTITLES = [
+  '// игра для тех кто любит закрывать задачки ;)',
+  '// а сколько задач сможешь закрыть ТЫ?',
+  '// секс — это круто, но давай закрывать таски?',
+  '// бэклог сам себя не разгребёт',
+  '// дофамин от DONE лучше любого кофе',
+  '// перетаскивай карточки, пока не уволят',
+  '// стендап начался, а задачи сами себя не закроют',
+  '// тут как на работе, только весело',
+  '// deadline was yesterday',
+  '// rm -rf backlog/',
+  '// git push --force и погнали',
+  '// TODO: закрыть все TODO',
+  '// мечта закрывать таски, а не созвоны',
+  '// 10x engineer simulator',
+  '// "это же на 5 минут" — PM, 2026',
+  '// ctrl+Z не поможет',
+  '// burnout speedrun any%',
+];
+
 export function StartScreen() {
   const startGame = useGameStore((s) => s.startGame);
   const [selectedRole, setSelectedRole] = useState<PlayerRole | null>(null);
   const [playerNick, setPlayerNick] = useState(localStorage.getItem('ikanban_nickname') ?? '');
   const [playerComp, setPlayerComp] = useState(localStorage.getItem('ikanban_company') || null);
+  const [subtitleIdx, setSubtitleIdx] = useState(() => Math.floor(Math.random() * SUBTITLES.length));
+
+  const nextSubtitle = useCallback(() => {
+    setSubtitleIdx((prev) => {
+      let next: number;
+      do { next = Math.floor(Math.random() * SUBTITLES.length); } while (next === prev && SUBTITLES.length > 1);
+      return next;
+    });
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(nextSubtitle, 4000);
+    return () => clearInterval(timer);
+  }, [nextSubtitle]);
 
   const handleStart = () => {
     if (selectedRole) startGame(selectedRole);
@@ -35,9 +69,20 @@ export function StartScreen() {
         <h1 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-neon-pink via-neon-purple to-neon-blue mb-2">
           I KANBAN
         </h1>
-        <p className="text-lg text-gray-400 font-mono">
-          // закрой как можно больше задач ;)
-        </p>
+        <div className="h-8 flex items-center justify-center overflow-hidden">
+          <AnimatePresence mode="wait">
+            <motion.p
+              key={subtitleIdx}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.4 }}
+              className="text-base md:text-lg text-gray-400 font-mono"
+            >
+              {SUBTITLES[subtitleIdx]}
+            </motion.p>
+          </AnimatePresence>
+        </div>
       </motion.div>
 
       {/* Leaderboard */}
