@@ -6,7 +6,7 @@ import { supabaseConfigured } from '../../lib/supabase';
 import { Leaderboard } from './Leaderboard';
 import type { PlayerRole } from '../../types';
 
-const ROLES: PlayerRole[] = ['frontend', 'backend', 'devops', 'sre'];
+const ROLES: PlayerRole[] = ['frontend', 'backend', 'devops', 'sre', 'product', 'analyst'];
 
 export function StartScreen() {
   const startGame = useGameStore((s) => s.startGame);

@@ -61,6 +61,16 @@ export const INTERN_HOTFIX_TITLES: Record<PlayerRole, string[]> = {
     '503 на всё, мониторинг молчит',
     'Latency p99 = 30 секунд',
   ],
+  product: [
+    'CEO хочет пивот ПРЯМО СЕЙЧАС',
+    'Конкурент запустил то же самое',
+    'Инвестор просит метрики за вчера',
+  ],
+  analyst: [
+    'Данные за месяц пропали из DWH',
+    'CEO увидел "не тот" график',
+    'Отчёт для совета директоров через час',
+  ],
 };
 
 export const COLUMN_TITLES: Record<string, string> = {

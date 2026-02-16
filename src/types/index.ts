@@ -1,6 +1,6 @@
 export type ColumnId = 'backlog' | 'todo' | 'inProgress' | 'done';
 
-export type PlayerRole = 'frontend' | 'backend' | 'devops' | 'sre';
+export type PlayerRole = 'frontend' | 'backend' | 'devops' | 'sre' | 'product' | 'analyst';
 
 export type TaskType = 'bug' | 'feature' | 'hotfix' | 'meeting' | 'absurd';
 
