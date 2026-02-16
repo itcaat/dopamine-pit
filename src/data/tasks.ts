@@ -63,6 +63,36 @@ export const TASK_TEMPLATES: TaskTemplate[] = [
   { title: 'Мигрировать на новый фреймворк (опять)', type: 'absurd', roles: ['frontend'] },
   { title: 'Сверстать email для Outlook', type: 'absurd', roles: ['frontend'] },
 
+  // FRONTEND — batch 2
+  { title: 'Tooltip уходит за экран', type: 'bug', roles: ['frontend'] },
+  { title: 'Дропдаун открывается вверх ногами', type: 'bug', roles: ['frontend'] },
+  { title: 'Фокус уходит в невидимый элемент', type: 'bug', roles: ['frontend'] },
+  { title: 'Таблица рендерится 10 секунд', type: 'bug', roles: ['frontend'] },
+  { title: 'Стили из другого компонента протекли', type: 'bug', roles: ['frontend'] },
+  { title: 'Placeholder длиннее инпута', type: 'bug', roles: ['frontend'] },
+  { title: 'Drag-n-drop работает только вниз', type: 'bug', roles: ['frontend'] },
+  { title: 'WebSocket реконнектится каждую секунду', type: 'bug', roles: ['frontend'] },
+
+  { title: 'Голосовое управление формой', type: 'feature', roles: ['frontend'] },
+  { title: 'Конфетти при 500-й ошибке', type: 'feature', roles: ['frontend'] },
+  { title: 'Скелетоны для скелетонов', type: 'feature', roles: ['frontend'] },
+  { title: 'Параллакс для текста ошибки', type: 'feature', roles: ['frontend'] },
+  { title: '3D-анимация для чекбокса', type: 'feature', roles: ['frontend'] },
+  { title: 'Тач ID для лайка', type: 'feature', roles: ['frontend'] },
+  { title: 'Виброотклик при каждом клике', type: 'feature', roles: ['frontend'] },
+
+  { title: 'Infinite loop в useEffect на проде', type: 'hotfix', roles: ['frontend'] },
+  { title: 'Утечка памяти убивает вкладку', type: 'hotfix', roles: ['frontend'] },
+  { title: 'Кнопка оплаты не кликается', type: 'hotfix', roles: ['frontend'] },
+  { title: 'Prod собрался с dev-конфигом', type: 'hotfix', roles: ['frontend'] },
+
+  { title: 'Понять чужой CSS без комментариев', type: 'absurd', roles: ['frontend'] },
+  { title: 'Найти элемент в DOM на 800 уровней', type: 'absurd', roles: ['frontend'] },
+  { title: 'Собрать 47 согласований на UI-кит', type: 'absurd', roles: ['frontend'] },
+  { title: 'Поддержать RTL за один спринт', type: 'absurd', roles: ['frontend'] },
+  { title: 'Сделать идеальный автокомплит', type: 'absurd', roles: ['frontend'] },
+  { title: '"Просто поправь отступ" (20 файлов)', type: 'absurd', roles: ['frontend'] },
+
   // ============================================================
   //  BACKEND
   // ============================================================
@@ -101,6 +131,36 @@ export const TASK_TEMPLATES: TaskTemplate[] = [
   { title: 'Прочитать stack trace на 500 строк', type: 'absurd', roles: ['backend'] },
   { title: 'Дебагнуть race condition по логам', type: 'absurd', roles: ['backend'] },
   { title: 'Объяснить фронту, зачем 404', type: 'absurd', roles: ['backend'] },
+
+  // BACKEND — batch 2
+  { title: 'Токен не протухает никогда', type: 'bug', roles: ['backend'] },
+  { title: 'Webhook приходит 3 раза', type: 'bug', roles: ['backend'] },
+  { title: 'Дедлок при двух параллельных заказах', type: 'bug', roles: ['backend'] },
+  { title: 'UTF-8 в эмодзи ломает парсер', type: 'bug', roles: ['backend'] },
+  { title: 'Поле email принимает "aaa"', type: 'bug', roles: ['backend'] },
+  { title: 'Swagger и код живут разной жизнью', type: 'bug', roles: ['backend'] },
+  { title: 'Очередь растёт быстрее консьюмера', type: 'bug', roles: ['backend'] },
+  { title: 'Таймзоны — сервер UTC, база MSK, фронт CET', type: 'bug', roles: ['backend'] },
+
+  { title: 'Бот-модератор для Slack-каналов', type: 'feature', roles: ['backend'] },
+  { title: 'API-гейтвей для одного микросервиса', type: 'feature', roles: ['backend'] },
+  { title: 'Saga-оркестратор для отправки письма', type: 'feature', roles: ['backend'] },
+  { title: 'SSO через 7 провайдеров', type: 'feature', roles: ['backend'] },
+  { title: 'Генератор PDF из PDF', type: 'feature', roles: ['backend'] },
+  { title: 'WebSocket-чат с историей на 10 лет', type: 'feature', roles: ['backend'] },
+  { title: 'Мультитенант для 2 клиентов', type: 'feature', roles: ['backend'] },
+
+  { title: 'SQL-инъекция в проде', type: 'hotfix', roles: ['backend'] },
+  { title: 'Пользователь видит чужие данные', type: 'hotfix', roles: ['backend'] },
+  { title: 'Очередь забилась на 2 млн сообщений', type: 'hotfix', roles: ['backend'] },
+  { title: 'OOM на воркере каждые 30 минут', type: 'hotfix', roles: ['backend'] },
+
+  { title: 'Разобраться в ORM-магии', type: 'absurd', roles: ['backend'] },
+  { title: '"Почему тест проходит локально?"', type: 'absurd', roles: ['backend'] },
+  { title: 'Ручной deploy через SSH в 2026', type: 'absurd', roles: ['backend'] },
+  { title: 'Написать миграцию для миграции', type: 'absurd', roles: ['backend'] },
+  { title: 'Разделить монолит на 50 микросервисов', type: 'absurd', roles: ['backend'] },
+  { title: 'Объяснить бизнесу что такое eventual consistency', type: 'absurd', roles: ['backend'] },
 
   // ============================================================
   //  DEVOPS
@@ -141,6 +201,36 @@ export const TASK_TEMPLATES: TaskTemplate[] = [
   { title: '"Это работало в стейджинге"', type: 'absurd', roles: ['devops'] },
   { title: 'Развернуть прод по документации', type: 'absurd', roles: ['devops'] },
 
+  // DEVOPS — batch 2
+  { title: 'ConfigMap перезаписал секрет', type: 'bug', roles: ['devops'] },
+  { title: 'Ingress маршрутизирует в никуда', type: 'bug', roles: ['devops'] },
+  { title: 'Registry переполнился образами', type: 'bug', roles: ['devops'] },
+  { title: 'Init-контейнер не завершается', type: 'bug', roles: ['devops'] },
+  { title: 'Liveness probe убивает здоровый под', type: 'bug', roles: ['devops'] },
+  { title: 'ArgoCD синхронится в бесконечном цикле', type: 'bug', roles: ['devops'] },
+  { title: 'Логи ротируются раз в год', type: 'bug', roles: ['devops'] },
+  { title: 'Autoscaler масштабирует в ноль', type: 'bug', roles: ['devops'] },
+
+  { title: 'Platform engineering для 3 человек', type: 'feature', roles: ['devops'] },
+  { title: 'FinOps дашборд для каждого пода', type: 'feature', roles: ['devops'] },
+  { title: 'Immutable infrastructure для стейджинга', type: 'feature', roles: ['devops'] },
+  { title: 'Internal developer portal', type: 'feature', roles: ['devops'] },
+  { title: 'Policy-as-code для всего кластера', type: 'feature', roles: ['devops'] },
+  { title: 'Spot-инстансы для прода (what could go wrong)', type: 'feature', roles: ['devops'] },
+  { title: 'Feature flags через Kubernetes labels', type: 'feature', roles: ['devops'] },
+
+  { title: 'Pod Eviction на всех нодах сразу', type: 'hotfix', roles: ['devops'] },
+  { title: 'Terraform удалил load balancer', type: 'hotfix', roles: ['devops'] },
+  { title: 'Секреты в plain text в логах', type: 'hotfix', roles: ['devops'] },
+  { title: 'DNS-loop уронил весь кластер', type: 'hotfix', roles: ['devops'] },
+
+  { title: 'Написать документацию для пайплайна', type: 'absurd', roles: ['devops'] },
+  { title: '"У меня работает в миникубе"', type: 'absurd', roles: ['devops'] },
+  { title: 'Обновить кластер без даунтайма (хаха)', type: 'absurd', roles: ['devops'] },
+  { title: 'Убедить всех использовать один CI', type: 'absurd', roles: ['devops'] },
+  { title: 'Отдебажить networking в Kubernetes', type: 'absurd', roles: ['devops'] },
+  { title: 'Объяснить разницу между CD и CD', type: 'absurd', roles: ['devops'] },
+
   // ============================================================
   //  SRE
   // ============================================================
@@ -179,6 +269,36 @@ export const TASK_TEMPLATES: TaskTemplate[] = [
   { title: 'Починить алерт не сломав другой', type: 'absurd', roles: ['sre'] },
   { title: '"Просто добавь retry"', type: 'absurd', roles: ['sre'] },
 
+  // SRE — batch 2
+  { title: 'Alert fatigue — 200 алертов в час', type: 'bug', roles: ['sre'] },
+  { title: 'Метрика counter сбросилась в ноль', type: 'bug', roles: ['sre'] },
+  { title: 'Distributed tracing теряет спаны', type: 'bug', roles: ['sre'] },
+  { title: 'Корреляция инцидентов не работает', type: 'bug', roles: ['sre'] },
+  { title: 'On-call расписание кривое — дежурят двое', type: 'bug', roles: ['sre'] },
+  { title: 'Statuspage показывает "all green" при даунтайме', type: 'bug', roles: ['sre'] },
+  { title: 'Log aggregation отстаёт на 20 минут', type: 'bug', roles: ['sre'] },
+  { title: 'Service dependency map устарела', type: 'bug', roles: ['sre'] },
+
+  { title: 'SLO-трекер с автоматическим бюджетом', type: 'feature', roles: ['sre'] },
+  { title: 'Incident commander бот в Slack', type: 'feature', roles: ['sre'] },
+  { title: 'Golden signals дашборд для каждого сервиса', type: 'feature', roles: ['sre'] },
+  { title: 'Load testing перед каждым релизом', type: 'feature', roles: ['sre'] },
+  { title: 'Error budget policy для продактов', type: 'feature', roles: ['sre'] },
+  { title: 'Canary analysis автоматизация', type: 'feature', roles: ['sre'] },
+  { title: 'Unified logging format для 30 сервисов', type: 'feature', roles: ['sre'] },
+
+  { title: 'Thundering herd после деплоя', type: 'hotfix', roles: ['sre'] },
+  { title: 'Connection pool exhaustion', type: 'hotfix', roles: ['sre'] },
+  { title: 'DNS TTL не обновился, трафик идёт в старый IP', type: 'hotfix', roles: ['sre'] },
+  { title: 'Горит production — rollback не помогает', type: 'hotfix', roles: ['sre'] },
+
+  { title: 'Убедить команду писать runbooks', type: 'absurd', roles: ['sre'] },
+  { title: 'Посчитать "скока девяток" нам нужно', type: 'absurd', roles: ['sre'] },
+  { title: '"Давайте отключим мониторинг на время деплоя"', type: 'absurd', roles: ['sre'] },
+  { title: 'Провести game day без паники', type: 'absurd', roles: ['sre'] },
+  { title: 'Blameless постмортем (с blame)', type: 'absurd', roles: ['sre'] },
+  { title: 'Объяснить latency budget менеджменту', type: 'absurd', roles: ['sre'] },
+
   // ============================================================
   //  PRODUCT
   // ============================================================
@@ -216,6 +336,36 @@ export const TASK_TEMPLATES: TaskTemplate[] = [
   { title: '"Давайте как в Тинькофф, только лучше"', type: 'absurd', roles: ['product'] },
   { title: 'Объяснить CEO что MVP ≠ финал', type: 'absurd', roles: ['product'] },
 
+  // PRODUCT — batch 2
+  { title: 'Фидбэк юзеров противоречит метрикам', type: 'bug', roles: ['product'] },
+  { title: 'OKR из прошлого квартала копипастнули', type: 'bug', roles: ['product'] },
+  { title: 'Воронка считает ботов за юзеров', type: 'bug', roles: ['product'] },
+  { title: 'Product-market fit пропал после редизайна', type: 'bug', roles: ['product'] },
+  { title: 'Спецификация и прод — два разных продукта', type: 'bug', roles: ['product'] },
+  { title: 'Customer journey map ведёт в тупик', type: 'bug', roles: ['product'] },
+  { title: 'Конверсия упала а никто не заметил', type: 'bug', roles: ['product'] },
+  { title: 'Два PM пилят одну фичу по-разному', type: 'bug', roles: ['product'] },
+
+  { title: 'Vibes-based приоритизация', type: 'feature', roles: ['product'] },
+  { title: 'AI-генератор юзер-стори', type: 'feature', roles: ['product'] },
+  { title: 'Автоматический JTBD-фреймворк', type: 'feature', roles: ['product'] },
+  { title: 'Встроенный конкурентный анализ', type: 'feature', roles: ['product'] },
+  { title: 'NPS-опрос при закрытии баг-репорта', type: 'feature', roles: ['product'] },
+  { title: 'Product analytics за 3 клика (утопия)', type: 'feature', roles: ['product'] },
+  { title: 'Roadmap с AI-эстимейтами', type: 'feature', roles: ['product'] },
+
+  { title: 'Клиент грозит уйти к конкуренту', type: 'hotfix', roles: ['product'] },
+  { title: 'Фича в проде а PRD нет', type: 'hotfix', roles: ['product'] },
+  { title: 'Стейкхолдер эскалировал на CEO', type: 'hotfix', roles: ['product'] },
+  { title: 'Релиз сломал главный use case', type: 'hotfix', roles: ['product'] },
+
+  { title: 'Провести discovery с дедлайном вчера', type: 'absurd', roles: ['product'] },
+  { title: '"Давайте без ТЗ, и так понятно"', type: 'absurd', roles: ['product'] },
+  { title: 'Убедить стейкхолдера что он не прав', type: 'absurd', roles: ['product'] },
+  { title: 'Impact mapping для бага в footer', type: 'absurd', roles: ['product'] },
+  { title: 'Ежедневный отчёт об отчётах', type: 'absurd', roles: ['product'] },
+  { title: 'Написать стратегию на Q5', type: 'absurd', roles: ['product'] },
+
   // ============================================================
   //  ANALYST
   // ============================================================
@@ -252,6 +402,36 @@ export const TASK_TEMPLATES: TaskTemplate[] = [
   { title: 'Доказать что фича работает (она нет)', type: 'absurd', roles: ['analyst'] },
   { title: 'Визуализировать данные без данных', type: 'absurd', roles: ['analyst'] },
   { title: '"Просто выгрузи из базы" (200 млн строк)', type: 'absurd', roles: ['analyst'] },
+
+  // ANALYST — batch 2
+  { title: 'Airflow DAG упал и никто не заметил', type: 'bug', roles: ['analyst'] },
+  { title: 'Витрина данных расходится с источником', type: 'bug', roles: ['analyst'] },
+  { title: 'Window function съела всю память', type: 'bug', roles: ['analyst'] },
+  { title: 'Дашборд грузится дольше чем SQL', type: 'bug', roles: ['analyst'] },
+  { title: 'Pivot table показывает отрицательных юзеров', type: 'bug', roles: ['analyst'] },
+  { title: 'Партицирование таблицы сломало отчёты', type: 'bug', roles: ['analyst'] },
+  { title: 'Данные пришли в неправильной кодировке', type: 'bug', roles: ['analyst'] },
+  { title: 'Дедупликация удалила оригиналы', type: 'bug', roles: ['analyst'] },
+
+  { title: 'Self-service аналитика для менеджеров', type: 'feature', roles: ['analyst'] },
+  { title: 'Алерт на аномалии в метриках', type: 'feature', roles: ['analyst'] },
+  { title: 'Автогенерация SQL из естественного языка', type: 'feature', roles: ['analyst'] },
+  { title: 'Data quality мониторинг', type: 'feature', roles: ['analyst'] },
+  { title: 'Reverse ETL в CRM', type: 'feature', roles: ['analyst'] },
+  { title: 'Embedding-поиск по логам', type: 'feature', roles: ['analyst'] },
+  { title: 'Предиктивная модель оттока на XGBoost', type: 'feature', roles: ['analyst'] },
+
+  { title: 'Отчёт уже у CEO а данные неправильные', type: 'hotfix', roles: ['analyst'] },
+  { title: 'Airflow заспамил 10000 тасков', type: 'hotfix', roles: ['analyst'] },
+  { title: 'Аналитический запрос заблокировал транзакции', type: 'hotfix', roles: ['analyst'] },
+  { title: 'Tableau лицензия истекла перед демо', type: 'hotfix', roles: ['analyst'] },
+
+  { title: 'Найти "actionable insights" в шуме', type: 'absurd', roles: ['analyst'] },
+  { title: '"А можно в Excel?" (10 GB данных)', type: 'absurd', roles: ['analyst'] },
+  { title: 'Объяснить p-value маркетологу', type: 'absurd', roles: ['analyst'] },
+  { title: 'Доказать стат. значимость на 12 юзерах', type: 'absurd', roles: ['analyst'] },
+  { title: 'Нарисовать график без осей', type: 'absurd', roles: ['analyst'] },
+  { title: '"Почему цифры другие если посчитать иначе?"', type: 'absurd', roles: ['analyst'] },
 ];
 
 /** Get tasks available for a specific role */
