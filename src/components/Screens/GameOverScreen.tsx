@@ -461,12 +461,12 @@ export function GameOverScreen() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.6 }}
-        className="flex gap-4 mt-6"
+        className="flex gap-3 mt-6"
       >
         <button
           onClick={() => startGame(role)}
           className="
-            px-8 py-3 rounded-xl font-bold tracking-wider
+            px-6 py-3 rounded-xl font-bold tracking-wider
             bg-gradient-to-r from-neon-pink to-neon-purple
             text-white cursor-pointer
             hover:scale-105 transition-transform
@@ -477,13 +477,27 @@ export function GameOverScreen() {
         <button
           onClick={resetGame}
           className="
-            px-8 py-3 rounded-xl font-bold tracking-wider
+            px-6 py-3 rounded-xl font-bold tracking-wider
             bg-gray-800 text-gray-300 cursor-pointer
             hover:bg-gray-700 transition-colors
           "
         >
           В МЕНЮ
         </button>
+        <a
+          href="https://t.me/+JTRfw6Nts3wyYjQy"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="
+            px-6 py-3 rounded-xl font-bold tracking-wider
+            bg-gray-800 text-neon-blue cursor-pointer
+            hover:bg-gray-700 transition-colors
+            flex items-center gap-2
+          "
+        >
+          <img src={`${import.meta.env.BASE_URL}telegram.svg`} alt="" className="w-4 h-4" />
+          ЧАТ
+        </a>
       </motion.div>
 
       {/* PWA Install Banner */}
@@ -538,19 +552,20 @@ export function GameOverScreen() {
         )}
       </AnimatePresence>
 
-      {/* Channel link */}
+      {/* DevOps Brain */}
       <motion.a
         href="https://t.me/devopsbrain"
         target="_blank"
         rel="noopener noreferrer"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.9 }}
-        className="mt-6 mb-8 flex items-center gap-2.5 px-6 py-2.5 rounded-xl text-sm font-bold tracking-wider border border-neon-blue/40 text-neon-blue hover:bg-neon-blue/10 transition-colors"
+        transition={{ delay: 1 }}
+        className="mt-6 mb-8 flex items-center gap-2 px-5 py-2 rounded-xl text-xs border border-neon-blue/30 text-neon-blue hover:bg-neon-blue/10 transition-colors"
       >
-        <img src={`${import.meta.env.BASE_URL}telegram.svg`} alt="" className="w-5 h-5" />
-        DevOps Brain
+        <img src={`${import.meta.env.BASE_URL}telegram.svg`} alt="" className="w-4 h-4" />
+        DevOps Brain <span className="text-gray-500">– про инфру и не только</span>
       </motion.a>
+
     </div>
   );
 }

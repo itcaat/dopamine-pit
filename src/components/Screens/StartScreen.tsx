@@ -9,13 +9,12 @@ import type { PlayerRole } from '../../types';
 const ROLES: PlayerRole[] = ['frontend', 'backend', 'devops', 'sre', 'product', 'analyst'];
 
 const SUBTITLES = [
-  '// игра для тех кто любит закрывать задачки ;)',
+  '// для тех кто любит закрывать задачки ;)',
   '// а сколько задач сможешь закрыть ТЫ?',
   '// секс — это круто, но давай закрывать таски?',
   '// бэклог сам себя не разгребёт',
   '// дофамин от DONE лучше любого кофе',
   '// перетаскивай карточки, пока не уволят',
-  '// стендап начался, а задачи сами себя не закроют',
   '// тут как на работе, только весело',
   '// deadline was yesterday',
   '// rm -rf backlog/',
@@ -185,6 +184,19 @@ export function StartScreen() {
       >
         (Отказаться уже нельзя)
       </motion.p>
+
+      <motion.a
+        href="https://t.me/devopsbrain"
+        target="_blank"
+        rel="noopener noreferrer"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1 }}
+        className="mt-6 flex items-center gap-2 px-5 py-2 rounded-xl text-xs border border-neon-blue/30 text-neon-blue hover:bg-neon-blue/10 transition-colors"
+      >
+        <img src={`${import.meta.env.BASE_URL}telegram.svg`} alt="" className="w-4 h-4" />
+        DevOps Brain <span className="text-gray-500">– про инфру и не только</span>
+      </motion.a>
       </div>
     </div>
   );
