@@ -6,6 +6,7 @@ import { TASK_LABELS, ROLE_META } from '../../data/tasks';
 import { submitScore, fetchCompanies, incrementGames, checkNicknameInCompany, supabaseConfigured } from '../../lib/supabase';
 import { getCurrentTournamentId } from '../../lib/tournament';
 import { Leaderboard } from './Leaderboard';
+import { useInstallPrompt } from '../../hooks/useInstallPrompt';
 import type { TaskType } from '../../types';
 
 const LS_NICK = 'ikanban_nickname';
@@ -34,6 +35,9 @@ export function GameOverScreen() {
   const [gamesPlayed, setGamesPlayed] = useState<number | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
 
+  // PWA install prompt
+  const { showBanner, isIOSDevice, canInstallNative, triggerBanner, install, dismiss } = useInstallPrompt();
+
   // Company autocomplete
   const [companies, setCompanies] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -45,6 +49,13 @@ export function GameOverScreen() {
       fetchCompanies().then(setCompanies).catch(() => {});
     }
   }, []);
+
+  // Show PWA install banner after score is submitted (or immediately if no Supabase)
+  useEffect(() => {
+    if (!supabaseConfigured || submitState === 'done') {
+      triggerBanner();
+    }
+  }, [submitState, triggerBanner]);
 
   const filteredCompanies = company.trim()
     ? companies.filter((c) =>
@@ -474,6 +485,58 @@ export function GameOverScreen() {
           В МЕНЮ
         </button>
       </motion.div>
+
+      {/* PWA Install Banner */}
+      <AnimatePresence>
+        {showBanner && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+            className="max-w-sm w-full mt-4 bg-gradient-to-r from-neon-purple/15 to-neon-blue/15 rounded-xl p-4 border border-neon-purple/30 relative"
+          >
+            <button
+              onClick={dismiss}
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-300 transition-colors cursor-pointer text-lg leading-none"
+              aria-label="Закрыть"
+            >
+              &times;
+            </button>
+
+            {canInstallNative ? (
+              <>
+                <p className="text-sm font-bold text-white mb-1">
+                  Добавить на главный экран?
+                </p>
+                <p className="text-xs text-gray-400 mb-3">
+                  Играй как в обычном приложении — без браузера
+                </p>
+                <button
+                  onClick={install}
+                  className="w-full py-2.5 rounded-lg font-bold text-sm uppercase tracking-wider cursor-pointer bg-gradient-to-r from-neon-purple to-neon-blue text-white hover:scale-[1.02] transition-transform"
+                >
+                  Установить
+                </button>
+              </>
+            ) : isIOSDevice ? (
+              <>
+                <p className="text-sm font-bold text-white mb-1">
+                  Добавить на главный экран?
+                </p>
+                <p className="text-xs text-gray-400 leading-relaxed">
+                  Нажми{' '}
+                  <svg className="inline w-4 h-4 align-text-bottom text-neon-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M12 3v12m0-12l-4 4m4-4l4 4" />
+                  </svg>{' '}
+                  <strong className="text-white">Поделиться</strong>{' '}→{' '}
+                  <strong className="text-white">На экран «Домой»</strong>
+                </p>
+              </>
+            ) : null}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Channel link */}
       <motion.a
