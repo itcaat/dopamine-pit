@@ -5,6 +5,7 @@ import { ROLE_META } from '../../data/tasks';
 import { supabaseConfigured } from '../../lib/supabase';
 import { Leaderboard } from './Leaderboard';
 import { sanitize, validateNickname } from '../../utils/validation';
+import { getTelegramNickname, isInTelegramMiniApp, telegramReady, telegramExpand } from '../../lib/telegram';
 import type { PlayerRole } from '../../types';
 
 const LS_NICK = 'ikanban_nickname';
@@ -32,10 +33,28 @@ const SUBTITLES = [
 export function StartScreen() {
   const startGame = useGameStore((s) => s.startGame);
   const [selectedRole, setSelectedRole] = useState<PlayerRole | null>(null);
-  const [playerNick, setPlayerNick] = useState(localStorage.getItem(LS_NICK) ?? '');
+  const [playerNick, setPlayerNick] = useState(() => {
+    // If opened inside Telegram Mini App, always use Telegram username
+    const tgNick = getTelegramNickname();
+    if (tgNick) {
+      localStorage.setItem(LS_NICK, tgNick);
+      return tgNick;
+    }
+    return localStorage.getItem(LS_NICK) ?? '';
+  });
   const [subtitleIdx, setSubtitleIdx] = useState(() => Math.floor(Math.random() * SUBTITLES.length));
 
-  // Nickname input state (shown when user clicks start without a saved nick)
+  const isTelegram = isInTelegramMiniApp();
+
+  // Notify Telegram SDK that the app is ready and expand to full height
+  useEffect(() => {
+    if (isTelegram) {
+      telegramReady();
+      telegramExpand();
+    }
+  }, [isTelegram]);
+
+  // Nickname input state (shown when user clicks start without a saved nick, NOT in Telegram)
   const [showNickInput, setShowNickInput] = useState(false);
   const [nickname, setNickname] = useState('');
   const [nickError, setNickError] = useState('');
