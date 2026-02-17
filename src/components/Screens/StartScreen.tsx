@@ -4,8 +4,10 @@ import { useGameStore } from '../../store/gameStore';
 import { ROLE_META } from '../../data/tasks';
 import { supabaseConfigured } from '../../lib/supabase';
 import { Leaderboard } from './Leaderboard';
+import { sanitize, validateNickname } from '../../utils/validation';
 import type { PlayerRole } from '../../types';
 
+const LS_NICK = 'ikanban_nickname';
 const ROLES: PlayerRole[] = ['frontend', 'backend', 'devops', 'sre', 'product', 'analyst'];
 
 const SUBTITLES = [
@@ -30,9 +32,13 @@ const SUBTITLES = [
 export function StartScreen() {
   const startGame = useGameStore((s) => s.startGame);
   const [selectedRole, setSelectedRole] = useState<PlayerRole | null>(null);
-  const [playerNick, setPlayerNick] = useState(localStorage.getItem('ikanban_nickname') ?? '');
-  const [playerComp, setPlayerComp] = useState(localStorage.getItem('ikanban_company') || null);
+  const [playerNick, setPlayerNick] = useState(localStorage.getItem(LS_NICK) ?? '');
   const [subtitleIdx, setSubtitleIdx] = useState(() => Math.floor(Math.random() * SUBTITLES.length));
+
+  // Nickname input state (shown when user clicks start without a saved nick)
+  const [showNickInput, setShowNickInput] = useState(false);
+  const [nickname, setNickname] = useState('');
+  const [nickError, setNickError] = useState('');
 
   const nextSubtitle = useCallback(() => {
     setSubtitleIdx((prev) => {
@@ -48,13 +54,29 @@ export function StartScreen() {
   }, [nextSubtitle]);
 
   const handleStart = () => {
-    if (selectedRole) startGame(selectedRole);
+    if (!selectedRole) return;
+
+    const savedNick = localStorage.getItem(LS_NICK);
+    if (savedNick?.trim()) {
+      startGame(selectedRole);
+    } else {
+      setShowNickInput(true);
+    }
   };
 
-  const handleProfileChange = (nick: string, company: string | null) => {
-    setPlayerNick(nick);
-    setPlayerComp(company);
+  const handleNickSubmit = () => {
+    if (!selectedRole) return;
+
+    const result = validateNickname(nickname);
+    setNickError(result.error ?? '');
+    if (!result.valid) return;
+
+    localStorage.setItem(LS_NICK, result.value);
+    setPlayerNick(result.value);
+    startGame(selectedRole);
   };
+
+  const hasValidNick = sanitize(nickname).length >= 2;
 
   return (
     <div className="h-full px-4 overflow-y-auto py-8">
@@ -95,8 +117,6 @@ export function StartScreen() {
         >
           <Leaderboard
             playerNickname={playerNick}
-            playerCompany={playerComp}
-            onProfileChange={handleProfileChange}
           />
         </motion.div>
       )}
@@ -153,37 +173,94 @@ export function StartScreen() {
         </div>
       </motion.div>
 
-      {/* Start button */}
-      <motion.button
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{
-          opacity: selectedRole ? 1 : 0.4,
-          scale: 1,
-        }}
-        transition={{ delay: 0.5, duration: 0.4 }}
-        whileHover={selectedRole ? { scale: 1.05 } : {}}
-        whileTap={selectedRole ? { scale: 0.95 } : {}}
-        onClick={handleStart}
-        disabled={!selectedRole}
-        className={`
-          px-12 py-4 rounded-xl text-lg font-black tracking-wider
-          text-white shadow-lg transition-shadow duration-300
-          ${selectedRole
-            ? 'bg-gradient-to-r from-neon-pink to-neon-purple cursor-pointer hover:shadow-neon-pink/30 hover:shadow-xl'
-            : 'bg-gray-700 cursor-not-allowed'}
-        `}
-      >
-        {selectedRole ? 'НАЧАТЬ РАБОТУ' : 'ВЫБЕРИ РОЛЬ'}
-      </motion.button>
+      {/* Nickname input (shown when user has no saved nickname) */}
+      <AnimatePresence>
+        {showNickInput && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="max-w-lg w-full mb-4 overflow-hidden"
+          >
+            <div className="bg-bg-column/70 rounded-xl p-4 border border-gray-800">
+              <div className="text-[10px] text-gray-500 uppercase tracking-wider mb-3">
+                Введи ник для рейтинга
+              </div>
+              <div className="flex gap-2">
+                <div className="flex-1">
+                  <input
+                    type="text"
+                    placeholder="Никнейм"
+                    maxLength={30}
+                    value={nickname}
+                    onChange={(e) => { setNickname(e.target.value); setNickError(''); }}
+                    autoFocus
+                    onKeyDown={(e) => { if (e.key === 'Enter') handleNickSubmit(); }}
+                    className={`
+                      w-full px-3 py-2.5 rounded-lg text-sm
+                      bg-gray-800/80 border text-white
+                      placeholder:text-gray-600
+                      focus:outline-none focus:border-neon-purple/60
+                      ${nickError ? 'border-red-500/60' : 'border-gray-700'}
+                    `}
+                  />
+                  {nickError && (
+                    <p className="text-[10px] text-red-400 mt-0.5">{nickError}</p>
+                  )}
+                </div>
+                <button
+                  onClick={handleNickSubmit}
+                  disabled={!hasValidNick}
+                  className="
+                    px-5 py-2.5 rounded-lg font-bold text-sm uppercase tracking-wider
+                    transition-all cursor-pointer shrink-0
+                    bg-gradient-to-r from-neon-pink to-neon-purple text-white hover:scale-[1.02]
+                    disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100
+                  "
+                >
+                  Начать
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.8 }}
-        className="mt-3 text-xs text-gray-600"
-      >
-        (Отказаться уже нельзя)
-      </motion.p>
+      {/* Start button (hidden when nick input is shown) */}
+      {!showNickInput && (
+        <motion.button
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{
+            opacity: selectedRole ? 1 : 0.4,
+            scale: 1,
+          }}
+          transition={{ delay: 0.5, duration: 0.4 }}
+          whileHover={selectedRole ? { scale: 1.05 } : {}}
+          whileTap={selectedRole ? { scale: 0.95 } : {}}
+          onClick={handleStart}
+          disabled={!selectedRole}
+          className={`
+            px-12 py-4 rounded-xl text-lg font-black tracking-wider
+            text-white shadow-lg transition-shadow duration-300
+            ${selectedRole
+              ? 'bg-gradient-to-r from-neon-pink to-neon-purple cursor-pointer hover:shadow-neon-pink/30 hover:shadow-xl'
+              : 'bg-gray-700 cursor-not-allowed'}
+          `}
+        >
+          {selectedRole ? 'НАЧАТЬ РАБОТУ' : 'ВЫБЕРИ РОЛЬ'}
+        </motion.button>
+      )}
+
+      {!showNickInput && (
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8 }}
+          className="mt-3 text-xs text-gray-600"
+        >
+          (Отказаться уже нельзя)
+        </motion.p>
+      )}
 
       <motion.a
         href="https://t.me/devopsbrain"

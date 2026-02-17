@@ -18,7 +18,6 @@ function ensureClient(): SupabaseClient {
 export interface LeaderboardEntry {
   id: string;
   nickname: string;
-  company: string | null;
   score: number;
   survival_time: number;
   tasks_completed: number;
@@ -28,26 +27,11 @@ export interface LeaderboardEntry {
   created_at: string;
 }
 
-/** Check if a nickname already exists for a given company */
-export async function checkNicknameInCompany(
-  nickname: string,
-  company: string,
-): Promise<boolean> {
-  const db = ensureClient();
-  const { count } = await db
-    .from('leaderboard')
-    .select('*', { count: 'exact', head: true })
-    .ilike('nickname', nickname)
-    .ilike('company', company);
-  return (count ?? 0) > 0;
-}
-
-/** Submit a new score via rate-limited RPC (max 1 per 10s per nickname) */
+/** Submit a new score via rate-limited RPC (max 1 per minute per nickname) */
 export async function submitScore(entry: Omit<LeaderboardEntry, 'id' | 'created_at'>) {
   const db = ensureClient();
   const { error } = await db.rpc('submit_score_safe', {
     p_nickname: entry.nickname,
-    p_company: entry.company,
     p_score: entry.score,
     p_survival_time: entry.survival_time,
     p_tasks_completed: entry.tasks_completed,
@@ -93,49 +77,20 @@ export async function fetchAllTimeLeaderboard(currentTournamentId: string, limit
   return winners;
 }
 
-/** Fetch company leaderboard for current tournament (best score per player) */
-export async function fetchCompanyLeaderboard(company: string, tournamentId: string, limit = 3) {
-  const db = ensureClient();
-  const { data, error } = await db.rpc('get_tournament_top', {
-    p_tournament_id: tournamentId,
-    p_limit: limit,
-    p_company: company,
-  });
-  if (error) throw error;
-  return (data ?? []) as LeaderboardEntry[];
-}
-
-/** Fetch distinct company names for autocomplete */
-export async function fetchCompanies(): Promise<string[]> {
-  if (!supabase) return [];
-  const { data, error } = await supabase
-    .from('leaderboard')
-    .select('company')
-    .not('company', 'is', null)
-    .not('company', 'eq', '')
-    .order('company');
-  if (error) return [];
-
-  const unique = [...new Set((data ?? []).map((r: { company: string }) => r.company))];
-  return unique.filter(Boolean) as string[];
-}
-
-/** Fetch a player's best entry for a given context (for "your position" row) */
+/** Fetch a player's best entry for a given tournament (for "your position" row) */
 export async function fetchPlayerEntry(
   nickname: string,
   tournamentId: string,
-  company?: string,
 ): Promise<LeaderboardEntry | null> {
   const db = ensureClient();
-  let q = db
+  const { data } = await db
     .from('leaderboard')
     .select('*')
     .eq('nickname', nickname)
     .eq('tournament_id', tournamentId)
     .order('score', { ascending: false })
-    .limit(1);
-  if (company) q = q.eq('company', company);
-  const { data } = await q.maybeSingle();
+    .limit(1)
+    .maybeSingle();
   return (data as LeaderboardEntry) ?? null;
 }
 
@@ -143,13 +98,11 @@ export async function fetchPlayerEntry(
 export async function fetchPlayerRank(
   nickname: string,
   tournamentId: string,
-  company?: string,
 ): Promise<{ rank: number | null; total: number }> {
   const db = ensureClient();
   const { data, error } = await db.rpc('get_player_rank', {
     p_nickname: nickname,
     p_tournament_id: tournamentId,
-    p_company: company ?? null,
   });
   if (error) throw error;
   if (!data || (Array.isArray(data) && data.length === 0)) return { rank: null, total: 0 };
@@ -157,15 +110,13 @@ export async function fetchPlayerRank(
   return { rank: row.rank ?? null, total: row.total ?? 0 };
 }
 
-/** Fetch total unique player count for a tournament (and optionally a company) */
+/** Fetch total unique player count for a tournament */
 export async function fetchTotalPlayers(
   tournamentId: string,
-  company?: string,
 ): Promise<number> {
   const db = ensureClient();
   const { data, error } = await db.rpc('count_tournament_players', {
     p_tournament_id: tournamentId,
-    p_company: company ?? null,
   });
   if (error) throw error;
   return (data as number) ?? 0;

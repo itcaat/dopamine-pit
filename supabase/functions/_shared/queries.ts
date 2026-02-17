@@ -2,7 +2,6 @@ import type { SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 export interface TopEntry {
   nickname: string;
-  company: string | null;
   score: number;
 }
 

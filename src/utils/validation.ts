@@ -16,15 +16,6 @@ export function validateNickname(raw: string): { valid: boolean; error?: string;
   return { valid: true, value };
 }
 
-/** Validate company: empty OK, otherwise 2-50 chars after sanitize */
-export function validateCompany(raw: string): { valid: boolean; error?: string; value: string } {
-  const value = sanitize(raw);
-  if (value.length === 0) return { valid: true, value };
-  if (value.length < 2) return { valid: false, error: 'Минимум 2 символа', value };
-  if (value.length > 50) return { valid: false, error: 'Максимум 50 символов', value };
-  if (containsProfanity(value)) return { valid: false, error: 'Недопустимое слово', value };
-  return { valid: true, value };
-}
 
 const PROFANITY_PATTERNS = [
   /\bху[йяеёи]/i,

@@ -22,7 +22,6 @@ create policy "Anyone can insert" on leaderboard for insert with check (true);
 -- Indexes
 create index idx_leaderboard_score on leaderboard (score desc);
 create index idx_leaderboard_tournament on leaderboard (tournament_id, score desc);
-create index idx_leaderboard_company on leaderboard (company, score desc);
 create index idx_leaderboard_nickname on leaderboard (nickname, tournament_id);
 
 -- ============================================
@@ -68,12 +67,11 @@ $$;
 -- alter table leaderboard add constraint leaderboard_nickname_check check (char_length(nickname) between 2 and 30);
 
 -- ============================================
--- Rate-limited score submission (max 1 per 10s per nickname)
+-- Rate-limited score submission (max 1 per minute per nickname)
 -- ============================================
 
 create or replace function submit_score_safe(
   p_nickname text,
-  p_company text,
   p_score integer,
   p_survival_time real,
   p_tasks_completed integer,
@@ -92,7 +90,7 @@ begin
     raise exception 'Nickname too short';
   end if;
 
-  -- Rate limit: 1 submission per 10 seconds per nickname
+  -- Rate limit: 1 submission per minute per nickname
   select created_at into last_submit
   from leaderboard
   where nickname = p_nickname
@@ -103,8 +101,8 @@ begin
     raise exception 'Too many submissions, wait a few seconds';
   end if;
 
-  insert into leaderboard (nickname, company, score, survival_time, tasks_completed, max_combo, role, tournament_id)
-  values (trim(p_nickname), nullif(trim(coalesce(p_company, '')), ''), p_score, p_survival_time, p_tasks_completed, p_max_combo, p_role, p_tournament_id);
+  insert into leaderboard (nickname, score, survival_time, tasks_completed, max_combo, role, tournament_id)
+  values (trim(p_nickname), p_score, p_survival_time, p_tasks_completed, p_max_combo, p_role, p_tournament_id);
 end;
 $$;
 
@@ -120,11 +118,10 @@ select distinct on (nickname, tournament_id) *
 from leaderboard
 order by nickname, tournament_id, score desc;
 
--- RPC: get top N players for a tournament (best score per player, optional company filter)
+-- RPC: get top N players for a tournament (best score per player)
 create or replace function get_tournament_top(
   p_tournament_id text,
-  p_limit integer default 10,
-  p_company text default null
+  p_limit integer default 10
 )
 returns setof leaderboard
 language sql stable
@@ -133,32 +130,28 @@ as $$
     select distinct on (nickname) *
     from leaderboard
     where tournament_id = p_tournament_id
-      and (p_company is null or company = p_company)
     order by nickname, score desc
   ) best
   order by score desc
   limit p_limit;
 $$;
 
--- RPC: count unique players in a tournament (optional company filter)
+-- RPC: count unique players in a tournament
 create or replace function count_tournament_players(
-  p_tournament_id text,
-  p_company text default null
+  p_tournament_id text
 )
 returns integer
 language sql stable
 as $$
   select count(distinct nickname)::integer
   from leaderboard
-  where tournament_id = p_tournament_id
-    and (p_company is null or company = p_company);
+  where tournament_id = p_tournament_id;
 $$;
 
 -- RPC: get player rank by best score (unique players only)
 create or replace function get_player_rank(
   p_nickname text,
-  p_tournament_id text,
-  p_company text default null
+  p_tournament_id text
 )
 returns table(rank integer, total integer)
 language sql stable
@@ -167,7 +160,6 @@ as $$
     select nickname, max(score) as score
     from leaderboard
     where tournament_id = p_tournament_id
-      and (p_company is null or company = p_company)
     group by nickname
   ),
   player as (

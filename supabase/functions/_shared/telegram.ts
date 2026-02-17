@@ -5,13 +5,12 @@ export function pickRandom(phrases: string[]): string {
 }
 
 export function formatLeaderboard(
-  entries: { nickname: string; company: string | null; score: number }[],
+  entries: { nickname: string; score: number }[],
 ): string {
   return entries
     .map((entry, i) => {
       const medal = MEDALS[i] ?? `<b>${i + 1}.</b>`;
-      const companyStr = entry.company ? ` (${entry.company})` : "";
-      return `${medal} ${entry.nickname}${companyStr} — ${entry.score.toLocaleString()}`;
+      return `${medal} ${entry.nickname} — ${entry.score.toLocaleString()}`;
     })
     .join("\n");
 }
